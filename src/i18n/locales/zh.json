@@ -1,0 +1,9 @@
+{
+  "search": {
+  "placeholder": "搜索"
+  },
+  "result": {
+    "empty": "无记录"
+  },
+  "keymap": {}
+}

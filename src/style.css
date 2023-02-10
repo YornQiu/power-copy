@@ -1,0 +1,30 @@
+*, :before, :after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: #3d3d3d;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, Arial, sans-serif;
+  background-color: transparent;
+  box-sizing: border-box;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body > main {
+  height: 100vh;
+  background: rgba(234, 233, 233, 1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+}
