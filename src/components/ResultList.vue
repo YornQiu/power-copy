@@ -15,7 +15,7 @@ defineEmits<{
 
 <template>
   <div class="result-list">
-    <ul v-if="list.length">
+    <ul v-if="list.length" class="result-list__ul">
       <ResultListItem
         v-for="(e, i) in list"
         :key="i"
@@ -33,5 +33,11 @@ defineEmits<{
 <style>
 .result-list {
   flex: 1;
+  padding: 8px;
+}
+.result-list__ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 </style>

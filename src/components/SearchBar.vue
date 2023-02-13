@@ -41,7 +41,7 @@ const searchKey = ref('');
 .search-bar__input {
   color: #3d3d3d;
   font-size: 26px;
-  font-weight: 500;
+  font-weight: 400;
   margin: 0;
   padding: 0;
   border: 0;
