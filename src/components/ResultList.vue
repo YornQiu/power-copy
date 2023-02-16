@@ -20,6 +20,7 @@ defineEmits<{
         v-for="(e, i) in list"
         :key="i"
         :data="e"
+        :index="i"
         :selected="i === index"
         @click="$emit('clickItem', i)"
         @mouseenter="$emit('hoverItem', i)"
