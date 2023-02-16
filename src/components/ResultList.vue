@@ -1,15 +1,18 @@
 <script setup lang="ts">
+import type { Record } from '@/types';
+
 import ResultListEmpty from './ResultListEmpty.vue';
 import ResultListItem from './ResultListItem.vue';
 
 defineProps<{
-  list: string[];
+  list: Record[];
   index: number;
 }>();
 
 defineEmits<{
   (event: 'clickItem', params: number): void;
   (event: 'hoverItem', params: number): void;
+  (event: 'removeItem', params: number): void;
 }>();
 </script>
 

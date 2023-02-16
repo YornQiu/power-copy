@@ -1,19 +1,28 @@
 <script setup lang="ts">
+import type { Record } from '@/types';
+
 import hotkeys from 'hotkeys-js';
 import SearchBar from '@/components/SearchBar.vue';
 import ResultList from '@/components/ResultList.vue';
 import KeyTips from '@/components/KeyTips.vue';
 import { Hotkeys } from '@/constants';
 import { closeWindow } from '@/commands/window';
+import { getRecords } from '@/commands/records';
 
 const state = reactive({
-  list: ['qwe3rtyu', 'asdfgh', 'zxcvbnm,'] as string[],
+  records: [] as Record[],
+  searchKey: '',
   index: 0,
 });
 
+getRecords().then((res) => (state.records = res));
+
+const list = computed(() =>
+  state.searchKey ? state.records.filter((record) => record.content.includes(state.searchKey)) : state.records
+);
+
 function onSearchChange(val: string) {
-  //
-  console.log(val);
+  state.searchKey = val;
 }
 
 function changeIndex(i: number) {
@@ -27,7 +36,7 @@ function moveIndexUp() {
 }
 
 function moveIndexDown() {
-  if (state.index < state.list.length - 1) {
+  if (state.index < list.value.length - 1) {
     state.index += 1;
   }
 }
@@ -42,7 +51,7 @@ hotkeys(Hotkeys.Esc, () => {
 <template>
   <main class="main">
     <SearchBar @change="onSearchChange" />
-    <ResultList :list="state.list" :index="state.index" @click-item="changeIndex" @hover-item="changeIndex" />
+    <ResultList :list="list" :index="state.index" @click-item="changeIndex" @hover-item="changeIndex" />
 
     <KeyTips />
   </main>

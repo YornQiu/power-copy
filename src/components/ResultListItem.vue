@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Record } from '@/types';
+
 defineProps<{
-  data: string;
+  data: Record;
   index: number;
   selected?: boolean;
 }>();
@@ -9,7 +11,8 @@ defineProps<{
 <template>
   <li class="result-list-item" :class="{ 'is-selected': selected }">
     <span class="result-list-item__index">{{ index + 1 }}</span>
-    <div class="result-list-item__content">{{ data }}</div>
+    <div class="result-list-item__content">{{ data.content }}</div>
+    <span class="result-list-item__datetime">{{ data.create_at }}</span>
     <span class="result-list-item__action"></span>
   </li>
 </template>
