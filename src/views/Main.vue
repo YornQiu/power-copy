@@ -10,7 +10,11 @@ import { closeWindow } from '@/commands/window';
 import { getRecords } from '@/commands/records';
 
 const state = reactive({
-  records: [] as Record[],
+  records: [
+    { id: 0, content: 'qwertyui', ctype: '', create_at: 0 },
+    { id: 1, content: 'asdfghjkl', ctype: '', create_at: 0 },
+    { id: 2, content: 'zxcvbnm', ctype: '', create_at: 0 },
+  ] as Record[],
   searchKey: '',
   index: 0,
 });

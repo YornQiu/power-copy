@@ -1,4 +1,6 @@
-*, :before, :after {
+*,
+:before,
+:after {
   box-sizing: border-box;
 }
 
@@ -23,8 +25,4 @@ body {
 
 body > main {
   height: 100vh;
-  background: rgba(234, 233, 233, 1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 12px;
 }
