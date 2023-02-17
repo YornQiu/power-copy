@@ -16,9 +16,11 @@
       "window": {
         "all": true
       },
-      "shell": {
-        "all": false,
-        "open": true
+      "globalShortcut": {
+        "all": true
+      },
+      "clipboard": {
+        "all": true
       }
     },
     "bundle": {

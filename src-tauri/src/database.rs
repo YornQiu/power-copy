@@ -1,4 +1,13 @@
-use rusqlite::{params, Connection, Result};
+/*
+ * @Author: Yorn Qiu
+ * @Date: 2023-02-15 11:14:52
+ * @LastEditors: Yorn Qiu
+ * @LastEditTime: 2023-02-16 13:38:13
+ * @Description: file content
+ * @FilePath: /power-copy/src-tauri/src/database.rs
+ */
+
+use rusqlite::{params, Connection, Result, params_from_iter};
 use tauri::api::path::home_dir;
 
 pub struct DB {
@@ -19,7 +28,7 @@ impl DB {
         DB { conn }
     }
 
-    pub fn create_db() {
+    pub fn init() {
         let path = home_dir().unwrap();
         let conn = Connection::open(path).unwrap();
         let sql = r#"
@@ -64,13 +73,23 @@ impl DB {
         Ok(self.conn.last_insert_rowid())
     }
 
-    pub fn delete_all(&self) {}
-
-    pub fn delete_many(&self) {}
-
     pub fn delete_by_id(&self, id: u32) -> Result<()> {
-        let sql = "DELETE FROM record WHERE id = ?";
+        let sql = "DELETE FROM record WHERE in = ?";
         self.conn.execute(sql, [&id])?;
+
+        Ok(())
+    }
+
+    pub fn delete_many_by_ids(&self, ids: Vec<u32>) -> Result<()> {
+        let sql = "DELETE FROM record WHERE id IN (?)";
+        self.conn.execute(sql, params_from_iter(&ids))?;
+
+        Ok(())
+    }
+
+    pub fn delete_all(&self) -> Result<()> {
+        let sql = "DELETE FROM record";
+        self.conn.execute(sql, ())?;
 
         Ok(())
     }

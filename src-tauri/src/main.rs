@@ -2,7 +2,7 @@
  * @Author: Yorn Qiu
  * @Date: 2023-02-10 08:59:25
  * @LastEditors: Yorn Qiu
- * @LastEditTime: 2023-02-15 13:06:54
+ * @LastEditTime: 2023-02-16 16:38:03
  * @Description: file content
  * @FilePath: /power-copy/src-tauri/src/main.rs
  */
@@ -12,14 +12,15 @@
     windows_subsystem = "windows"
 )]
 
-use setup::set_window_shadow;
-
-mod setup;
+mod clipboard;
+mod commands;
 mod database;
+mod setup;
 
 fn main() {
     tauri::Builder::default()
-        .setup(set_window_shadow)
+        .setup(setup::setup)
+        // .invoke_handler(tauri::generate_handler![commands::get_records])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
