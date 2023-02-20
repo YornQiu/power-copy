@@ -2,23 +2,38 @@
  * @Author: Yorn Qiu
  * @Date: 2023-02-15 11:14:52
  * @LastEditors: Yorn Qiu
- * @LastEditTime: 2023-02-16 13:38:13
- * @Description: file content
+ * @LastEditTime: 2023-02-20 17:02:03
  * @FilePath: /power-copy/src-tauri/src/database.rs
+ * @Description: sqlite operation
  */
 
-use rusqlite::{params, Connection, Result, params_from_iter};
+use rusqlite::{params, params_from_iter, Connection, Result, Row};
+use serde::Serialize;
 use tauri::api::path::home_dir;
 
-pub struct DB {
-    conn: Connection,
-}
-
+// Clipboard record
+#[derive(Serialize, Clone, Debug)]
 pub struct Record {
     pub id: u32,
     pub ctype: String,
     pub content: String,
     pub create_at: u32,
+}
+
+impl Record {
+    fn parse(row: &Row) -> Result<Record, rusqlite::Error> {
+        Ok(Record {
+            id: row.get(0)?,
+            ctype: row.get(1)?,
+            content: row.get(2)?,
+            create_at: row.get(3)?,
+        })
+    }
+}
+
+// sqlite
+pub struct DB {
+    conn: Connection,
 }
 
 impl DB {
@@ -47,17 +62,11 @@ impl DB {
     pub fn find_all(&self) -> Result<Vec<Record>> {
         let sql = "SELECT * FROM record ORDER BY create_at DESC";
         let mut stmt = self.conn.prepare(sql)?;
-        let rows = stmt.query_map([], |row| {
-            Ok(Record {
-                id: row.get(0)?,
-                ctype: row.get(1)?,
-                content: row.get(2)?,
-                create_at: row.get(3)?,
-            })
-        })?;
+        let rows = stmt.query_map([], Record::parse)?;
+
         let mut res = Vec::new();
         for row in rows {
-            res.push(row?);
+            res.push(row.unwrap());
         }
 
         Ok(res)
@@ -66,9 +75,8 @@ impl DB {
     pub fn insert_one(&self, record: Record) -> Result<i64> {
         let sql = "INSERT INTO record (id,ctype,content) VALUES (?)";
 
-        let row = self
-            .conn
-            .execute(sql, params![record.id, record.ctype, record.content])?;
+        self.conn
+            .execute(sql, params![record.ctype, record.content])?;
 
         Ok(self.conn.last_insert_rowid())
     }
