@@ -42,6 +42,7 @@ const searchKey = ref('');
   color: #3d3d3d;
   font-size: 26px;
   font-weight: 400;
+  flex: 1;
   margin: 0;
   padding: 0;
   border: 0;
