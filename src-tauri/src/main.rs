@@ -2,7 +2,7 @@
  * @Author: Yorn Qiu
  * @Date: 2023-02-10 08:59:25
  * @LastEditors: Yorn Qiu
- * @LastEditTime: 2023-02-21 15:53:54
+ * @LastEditTime: 2023-02-21 16:36:55
  * @Description: file content
  * @FilePath: /power-copy/src-tauri/src/main.rs
  */
@@ -18,6 +18,7 @@ mod clipboard;
 mod commands;
 mod setup;
 mod storage;
+mod tray_handles;
 
 fn main() {
     tauri::Builder::default()

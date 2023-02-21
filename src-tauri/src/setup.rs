@@ -2,17 +2,21 @@
  * @Author: Yorn Qiu
  * @Date: 2023-02-10 14:41:02
  * @LastEditors: Yorn Qiu
- * @LastEditTime: 2023-02-21 16:25:10
+ * @LastEditTime: 2023-02-21 17:07:10
  * @FilePath: /power-copy/src-tauri/src/setup.rs
  * @Description: app setup
  */
 
-use tauri::{App, CustomMenuItem, GlobalShortcutManager, Manager, SystemTray, SystemTrayMenu};
+use tauri::{
+    App, CustomMenuItem, GlobalShortcutManager, Manager, SystemTray, SystemTrayEvent,
+    SystemTrayMenu, SystemTrayMenuItem,
+};
 use window_shadows::set_shadow;
 use window_vibrancy::{self, NSVisualEffectMaterial, NSVisualEffectState};
 
 use crate::clipboard::Clipboard;
 use crate::storage::Storage;
+use crate::tray_handles;
 
 fn set_window_vibrancy(app: &mut App) -> std::result::Result<(), Box<dyn std::error::Error>> {
     let window = app.get_window("main").unwrap();
@@ -47,8 +51,17 @@ fn set_system_tray(app: &mut App) -> std::result::Result<(), Box<dyn std::error:
         .with_menu(
             SystemTrayMenu::new()
                 .add_item(CustomMenuItem::new("about", "About"))
+                .add_native_item(SystemTrayMenuItem::Separator)
                 .add_item(CustomMenuItem::new("quit", "Quit")),
         )
+        .on_event(move |event| match event {
+            SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
+                "about" => tray_handles::display_about(),
+                "quit" => tray_handles::quit(),
+                _ => {}
+            },
+            _ => {}
+        })
         .build(app)?;
 
     Ok(())
