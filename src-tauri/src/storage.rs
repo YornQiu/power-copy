@@ -2,7 +2,7 @@
  * @Author: Yorn Qiu
  * @Date: 2023-02-15 11:14:52
  * @LastEditors: Yorn Qiu
- * @LastEditTime: 2023-02-21 10:21:51
+ * @LastEditTime: 2023-02-21 15:40:53
  * @FilePath: /power-copy/src-tauri/src/storage.rs
  * @Description: sqlite operation
  */
@@ -18,7 +18,7 @@ pub struct Record {
     pub id: u32,
     pub ctype: String,
     pub content: String,
-    pub create_at: u32,
+    pub create_at: String,
 }
 
 impl Record {
@@ -80,7 +80,7 @@ impl Storage {
     }
 
     pub fn insert_one(&self, record: Record) -> Result<i64> {
-        let sql = "INSERT INTO record (id,ctype,content) VALUES (?)";
+        let sql = "INSERT INTO record (ctype,content) VALUES (?1,?2)";
 
         self.conn
             .execute(sql, params![record.ctype, record.content])?;

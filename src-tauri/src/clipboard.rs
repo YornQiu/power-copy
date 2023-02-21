@@ -1,4 +1,4 @@
-use std::{thread, time::Duration};
+use std::{thread, time};
 
 use crate::storage::{Record, Storage};
 use anyhow::Result;
@@ -28,10 +28,10 @@ impl Clipboard {
                         if !content.is_empty() && content != last_content {
                             Storage::new()
                                 .insert_one(Record {
-                                    ctype: "".to_string(),
-                                    content,
-                                    id: todo!(),
-                                    create_at: todo!(),
+                                    id: 0,
+                                    ctype: "text".to_string(),
+                                    content: content.clone(),
+                                    create_at: "".to_string(),
                                 })
                                 .unwrap();
 
@@ -41,7 +41,7 @@ impl Clipboard {
                     Err(_) => (),
                 }
 
-                thread::sleep(Duration::from_millis(duration));
+                thread::sleep(time::Duration::from_millis(duration));
             }
         });
     }
