@@ -14,8 +14,8 @@
 
 mod clipboard;
 mod commands;
-mod database;
 mod setup;
+mod storage;
 
 fn main() {
     tauri::Builder::default()

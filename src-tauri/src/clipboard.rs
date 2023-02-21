@@ -1,6 +1,6 @@
 use std::{thread, time::Duration};
 
-use crate::database::{Record, DB};
+use crate::storage::{Record, Storage};
 use anyhow::Result;
 use arboard;
 
@@ -23,25 +23,23 @@ impl Clipboard {
             loop {
                 let text = clipboard.get_text();
 
-                text.map(|content| {
-                    if !content.is_empty() && content != last_content {
-                        let res = DB::new().insert_one(Record {
-                            ctype: "".to_string(),
-                            content,
-                            id: todo!(),
-                            create_at: todo!(),
-                        });
+                match text {
+                    Ok(content) => {
+                        if !content.is_empty() && content != last_content {
+                            Storage::new()
+                                .insert_one(Record {
+                                    ctype: "".to_string(),
+                                    content,
+                                    id: todo!(),
+                                    create_at: todo!(),
+                                })
+                                .unwrap();
 
-                        match res {
-                            Ok(_) => {}
-                            Err(e) => {
-                                println!("insert record error: {}", e);
-                            }
+                            last_content = content.to_string();
                         }
-
-                        last_content = content.to_string();
                     }
-                });
+                    Err(_) => (),
+                }
 
                 thread::sleep(Duration::from_millis(duration));
             }

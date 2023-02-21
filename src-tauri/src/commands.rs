@@ -7,24 +7,24 @@
  * @FilePath: /power-copy/src-tauri/src/commands.rs
  */
 
-use crate::database::{Record, DB};
+use crate::storage::{Record, Storage};
 
 #[tauri::command]
 pub fn get_records() -> Vec<Record> {
-    DB::new().find_all().unwrap()
+    Storage::new().find_all().unwrap()
 }
 
 #[tauri::command]
 pub fn delete_record(id: u32) {
-    DB::new().delete_by_id(id).unwrap()
+    Storage::new().delete_by_id(id).unwrap()
 }
 
 #[tauri::command]
 pub fn delete_records(ids: Vec<u32>) {
-    DB::new().delete_many_by_ids(ids).unwrap()
+    Storage::new().delete_many_by_ids(ids).unwrap()
 }
 
 #[tauri::command]
 pub fn clear_record() {
-    DB::new().delete_all().unwrap()
+    Storage::new().delete_all().unwrap()
 }

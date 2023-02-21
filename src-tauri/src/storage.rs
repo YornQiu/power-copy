@@ -2,14 +2,15 @@
  * @Author: Yorn Qiu
  * @Date: 2023-02-15 11:14:52
  * @LastEditors: Yorn Qiu
- * @LastEditTime: 2023-02-20 17:02:03
- * @FilePath: /power-copy/src-tauri/src/database.rs
+ * @LastEditTime: 2023-02-21 10:21:51
+ * @FilePath: /power-copy/src-tauri/src/storage.rs
  * @Description: sqlite operation
  */
 
+use std::{fs::File, path::Path};
+
 use rusqlite::{params, params_from_iter, Connection, Result, Row};
 use serde::Serialize;
-use tauri::api::path::home_dir;
 
 // Clipboard record
 #[derive(Serialize, Clone, Debug)]
@@ -31,25 +32,31 @@ impl Record {
     }
 }
 
-// sqlite
-pub struct DB {
+// sqlite storage
+pub struct Storage {
     conn: Connection,
 }
 
-impl DB {
-    pub fn new() -> Self {
-        let path = home_dir().unwrap();
+const DATA_FILE_NAME: &str = "data.db";
+
+impl Storage {
+    pub fn new() -> Storage {
+        let path = Path::new(".").join(DATA_FILE_NAME);
         let conn = Connection::open(path).unwrap();
-        DB { conn }
+        Storage { conn }
     }
 
     pub fn init() {
-        let path = home_dir().unwrap();
+        let path = Path::new(".").join(DATA_FILE_NAME);
+        if !Path::new(&path).exists() {
+            File::create(&path).unwrap();
+        }
+
         let conn = Connection::open(path).unwrap();
         let sql = r#"
         CREATE TABLE IF NOT EXISTS record
         (
-          id INTERGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+          id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
           ctype VARCHAR(16) DEFAULT '',
           content TEXT,
           create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
