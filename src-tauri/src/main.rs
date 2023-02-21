@@ -2,7 +2,7 @@
  * @Author: Yorn Qiu
  * @Date: 2023-02-10 08:59:25
  * @LastEditors: Yorn Qiu
- * @LastEditTime: 2023-02-21 16:36:55
+ * @LastEditTime: 2023-02-21 17:18:59
  * @Description: file content
  * @FilePath: /power-copy/src-tauri/src/main.rs
  */
@@ -12,7 +12,7 @@
     windows_subsystem = "windows"
 )]
 
-use tauri::SystemTray;
+use tauri::RunEvent;
 
 mod clipboard;
 mod commands;
@@ -23,13 +23,21 @@ mod tray_handles;
 fn main() {
     tauri::Builder::default()
         .setup(setup::setup)
-        .system_tray(SystemTray::new())
         .invoke_handler(tauri::generate_handler![
             commands::get_records,
             commands::delete_record,
             commands::delete_records,
             commands::clear_record,
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .build(tauri::generate_context!())
+        .expect("error while running tauri application")
+        .run(|app_handle, event| match event {
+            RunEvent::ExitRequested { api, .. } => {
+                api.prevent_exit();
+            }
+            RunEvent::Exit => {
+                app_handle.exit(0);
+            }
+            _ => {}
+        });
 }
