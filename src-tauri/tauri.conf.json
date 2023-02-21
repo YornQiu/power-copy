@@ -65,9 +65,9 @@
     },
     "windows": [
       {
+        "title": "Power Copy",
         "width": 675,
         "height": 430,
-        "title": "Power Copy",
         "fullscreen": false,
         "resizable": false,
         "transparent": true,

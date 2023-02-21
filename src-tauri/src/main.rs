@@ -2,7 +2,7 @@
  * @Author: Yorn Qiu
  * @Date: 2023-02-10 08:59:25
  * @LastEditors: Yorn Qiu
- * @LastEditTime: 2023-02-20 14:58:51
+ * @LastEditTime: 2023-02-21 15:53:54
  * @Description: file content
  * @FilePath: /power-copy/src-tauri/src/main.rs
  */
@@ -12,6 +12,8 @@
     windows_subsystem = "windows"
 )]
 
+use tauri::SystemTray;
+
 mod clipboard;
 mod commands;
 mod setup;
@@ -20,6 +22,7 @@ mod storage;
 fn main() {
     tauri::Builder::default()
         .setup(setup::setup)
+        .system_tray(SystemTray::new())
         .invoke_handler(tauri::generate_handler![
             commands::get_records,
             commands::delete_record,

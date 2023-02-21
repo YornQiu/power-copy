@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import type { Record } from '@/types';
 
-import { dateFormat } from '@/utils';
-
 defineProps<{
   data: Record;
   index: number;
@@ -14,7 +12,7 @@ defineProps<{
   <li class="result-list-item" :class="{ 'is-selected': selected }">
     <span class="result-list-item__index">{{ index + 1 }}</span>
     <div class="result-list-item__content">{{ data.content }}</div>
-    <span class="result-list-item__datetime">{{ dateFormat(data.create_at) }}</span>
+    <span class="result-list-item__datetime">{{ data.create_at }}</span>
     <span class="result-list-item__action"></span>
   </li>
 </template>
