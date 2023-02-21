@@ -2,12 +2,12 @@
  * @Author: Yorn Qiu
  * @Date: 2023-02-10 14:41:02
  * @LastEditors: Yorn Qiu
- * @LastEditTime: 2023-02-21 10:21:21
+ * @LastEditTime: 2023-02-21 16:25:10
  * @FilePath: /power-copy/src-tauri/src/setup.rs
  * @Description: app setup
  */
 
-use tauri::{App, GlobalShortcutManager, Manager};
+use tauri::{App, CustomMenuItem, GlobalShortcutManager, Manager, SystemTray, SystemTrayMenu};
 use window_shadows::set_shadow;
 use window_vibrancy::{self, NSVisualEffectMaterial, NSVisualEffectState};
 
@@ -42,6 +42,18 @@ fn set_window_shadow(app: &mut App) -> std::result::Result<(), Box<dyn std::erro
     Ok(())
 }
 
+fn set_system_tray(app: &mut App) -> std::result::Result<(), Box<dyn std::error::Error>> {
+    SystemTray::new()
+        .with_menu(
+            SystemTrayMenu::new()
+                .add_item(CustomMenuItem::new("about", "About"))
+                .add_item(CustomMenuItem::new("quit", "Quit")),
+        )
+        .build(app)?;
+
+    Ok(())
+}
+
 fn register_shortcut(app: &mut App) -> std::result::Result<(), Box<dyn std::error::Error>> {
     let mut shortcut = app.global_shortcut_manager();
     let app_handler = app.handle();
@@ -61,6 +73,7 @@ fn register_shortcut(app: &mut App) -> std::result::Result<(), Box<dyn std::erro
 pub fn setup(app: &mut App) -> std::result::Result<(), Box<dyn std::error::Error>> {
     set_window_vibrancy(app)?;
     set_window_shadow(app)?;
+    set_system_tray(app)?;
     register_shortcut(app)?;
     Storage::init();
     Clipboard::watch();
