@@ -2,7 +2,7 @@
  * @Autoor: Yorn Qiu
  * @Date: 2023-02-22 10:11:32
  * @LastEditors: Yorn Qiu
- * @LastEditTime: 2023-02-22 15:19:40
+ * @LastEditTime: 2023-02-22 15:43:55
  * @FilePath: /power-copy/src-tauri/src/tray.rs
  * @Description: system tray
  */
@@ -17,13 +17,13 @@ pub fn menu() -> SystemTray {
         .add_submenu(SystemTraySubmenu::new(
             "Theme",
             SystemTrayMenu::new()
-                .add_item(CustomMenuItem::new("theme_light", "Light"))
+                .add_item(CustomMenuItem::new("theme_light", "Light").selected())
                 .add_item(CustomMenuItem::new("theme_dark", "Dark")),
         ))
         .add_submenu(SystemTraySubmenu::new(
             "Language",
             SystemTrayMenu::new()
-                .add_item(CustomMenuItem::new("lang_en", "English"))
+                .add_item(CustomMenuItem::new("lang_en", "English").selected())
                 .add_item(CustomMenuItem::new("lang_zh", "简体中文")),
         ))
         .add_item(CustomMenuItem::new("about", "About"))
