@@ -7,13 +7,6 @@ use arboard;
 pub struct Clipboard;
 
 impl Clipboard {
-    pub fn set(content: String) -> Result<()> {
-        let mut clipboard = arboard::Clipboard::new()?;
-        clipboard.set_text(content)?;
-
-        Ok(())
-    }
-
     pub fn watch() {
         tauri::async_runtime::spawn(async move {
             let duration = 500;
