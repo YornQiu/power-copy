@@ -19,7 +19,7 @@ const searchKey = ref('');
       autoCapitalize="off"
       spellCheck="false"
       :placeholder="$t('search.placeholder')"
-      @change="$emit('change', searchKey)"
+      @input="$emit('change', searchKey)"
       @focus="$emit('focus', searchKey)"
     />
   </div>

@@ -38,6 +38,7 @@ defineEmits<{
 .result-list {
   flex: 1;
   padding: 8px;
+  overflow: auto;
 }
 .result-list__ul {
   margin: 0;

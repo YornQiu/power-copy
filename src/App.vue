@@ -1,57 +1,35 @@
 <script setup lang="ts">
-import type { Record } from '@/types';
-
 import hotkeys from 'hotkeys-js';
 import SearchBar from '@/components/SearchBar.vue';
 import ResultList from '@/components/ResultList.vue';
 import KeyTips from '@/components/KeyTips.vue';
-import { Hotkeys } from '@/constants';
-import { closeWindow } from '@/commands/window';
-import { getRecords } from '@/commands/records';
+import { Hotkeys } from '@/core/constants';
+import { closeWindow } from '@/core/commands/window';
+import { copyRecord } from '@/core/commands/records';
+import { useRecord } from '@/useRecord';
 
-const state = reactive({
-  records: [] as Record[],
-  searchKey: '',
-  index: 0,
-});
+const { records, index, searchKey, increaseIndex, decreaseIndex } = useRecord();
 
-getRecords().then((res) => (state.records = res));
-
-const list = computed(() =>
-  state.searchKey ? state.records.filter((record) => record.content.includes(state.searchKey)) : state.records
-);
-
-function onSearchChange(val: string) {
-  state.searchKey = val;
+async function selectRecord() {
+  const record = records.value[index.value];
+  await copyRecord(record.id);
+  closeWindow();
 }
 
-function changeIndex(i: number) {
-  state.index = i;
-}
-
-function moveIndexUp() {
-  if (state.index > 0) {
-    state.index -= 1;
-  }
-}
-
-function moveIndexDown() {
-  if (state.index < list.value.length - 1) {
-    state.index += 1;
-  }
-}
-
-hotkeys(Hotkeys.Up, moveIndexUp);
-hotkeys(Hotkeys.Down, moveIndexDown);
+hotkeys(Hotkeys.Up, decreaseIndex);
+hotkeys(Hotkeys.Down, increaseIndex);
 hotkeys(Hotkeys.Esc, () => {
   closeWindow();
+});
+hotkeys(Hotkeys.Enter, () => {
+  selectRecord();
 });
 </script>
 
 <template>
   <main class="main">
-    <SearchBar @change="onSearchChange" />
-    <ResultList :list="list" :index="state.index" @click-item="changeIndex" @hover-item="changeIndex" />
+    <SearchBar @change="(val) => (searchKey = val)" />
+    <ResultList :list="records" :index="index" @click-item="selectRecord" @hover-item="(i) => (index = i)" />
 
     <KeyTips />
   </main>
